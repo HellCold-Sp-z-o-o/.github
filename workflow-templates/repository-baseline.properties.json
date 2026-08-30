@@ -1,0 +1,11 @@
+{
+  "name": "HellCold Repository Baseline",
+  "description": "Validates mandatory governance files and prohibited credential artifacts.",
+  "iconName": "octicon shield-check",
+  "categories": [
+    "Code Scanning"
+  ],
+  "filePatterns": [
+    ".*"
+  ]
+}

@@ -1,0 +1,63 @@
+name: Validate public defaults
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-defaults-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Validate required files
+        shell: bash
+        run: |
+          set -euo pipefail
+          required=(
+            README.md
+            CONTRIBUTING.md
+            SECURITY.md
+            SUPPORT.md
+            .github/CODEOWNERS
+            .github/PULL_REQUEST_TEMPLATE.md
+            .github/ISSUE_TEMPLATE/config.yml
+            .github/workflows/reusable-repository-baseline.yml
+          )
+          for path in "${required[@]}"; do
+            test -s "$path" || { echo "Missing or empty: $path"; exit 1; }
+          done
+
+      - name: Validate JSON files
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            jq empty "$file"
+          done < <(find . -type f -name '*.json' -print0)
+
+      - name: Detect prohibited files and obvious secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          prohibited='\.(rvt|dwg|nwd|nwc|ifc|pfx|p12|key|pem|kdbx|tfstate|tfstate\.backup)$'
+          if find . -type f -not -path './.git/*' | grep -Eiq "$prohibited"; then
+            echo 'A prohibited binary, model, key, or state file was found.'
+            exit 1
+          fi
+          secret_pattern='(BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY|gh[pousr]_[A-Za-z0-9_]{30,}|AKIA[0-9A-Z]{16}|client_secret[[:space:]]*[:=][[:space:]]*[^${][^[:space:]]+)'
+          if grep -RIE --exclude-dir=.git --exclude='validate-governance.yml' "$secret_pattern" .; then
+            echo 'A possible hard-coded secret was found.'
+            exit 1
+          fi

@@ -1,0 +1,48 @@
+name: Architecture decision
+description: Propose a material architecture or governance decision
+title: "[Architecture]: "
+body:
+  - type: input
+    id: owner
+    attributes:
+      label: Proposed owner
+      placeholder: Team or role
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context and decision drivers
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Options considered
+    validations:
+      required: true
+  - type: textarea
+    id: decision
+    attributes:
+      label: Proposed decision
+    validations:
+      required: true
+  - type: textarea
+    id: consequences
+    attributes:
+      label: Consequences and tradeoffs
+    validations:
+      required: true
+  - type: textarea
+    id: security
+    attributes:
+      label: Security and data impact
+    validations:
+      required: true
+  - type: checkboxes
+    id: adr
+    attributes:
+      label: ADR
+      options:
+        - label: I will add or update an ADR if this proposal is accepted.
+          required: true
