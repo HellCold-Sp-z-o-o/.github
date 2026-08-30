@@ -1,0 +1,51 @@
+name: Feature
+description: Propose a new capability or improvement
+title: "[Feature]: "
+body:
+  - type: input
+    id: domain
+    attributes:
+      label: Domain
+      placeholder: business-central, ai-platform, integration, data, infrastructure
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Business or technical problem
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Expected outcome
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: "- [ ] Observable, testable result"
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - P1 - Critical
+        - P2 - High
+        - P3 - Normal
+        - P4 - Low
+    validations:
+      required: true
+  - type: dropdown
+    id: security
+    attributes:
+      label: Security or data impact
+      options:
+        - None known
+        - Requires assessment
+        - Material impact
+    validations:
+      required: true
