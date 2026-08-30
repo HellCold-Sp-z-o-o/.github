@@ -1,0 +1,15 @@
+name: HellCold repository baseline
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  baseline:
+    uses: HellCold-Sp-z-o-o/.github/.github/workflows/reusable-repository-baseline.yml@main
+
